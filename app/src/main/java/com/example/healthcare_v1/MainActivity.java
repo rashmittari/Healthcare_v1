@@ -15,12 +15,17 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
-    TextView createAcc;
+    TextView createAcc,loginForgotPassword;
     EditText loginEmail,loginPassword;
     Button loginButton;
     FirebaseAuth fAuth;
+    String userID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +61,29 @@ public class MainActivity extends AppCompatActivity {
                    @Override
                    public void onSuccess(AuthResult authResult) {
                        if (fAuth.getCurrentUser().isEmailVerified()) {
-                           startActivity(new Intent(getApplicationContext(), Home.class));
-                           finish();
+
+                           //load user data to verify profession
+                           userID=fAuth.getCurrentUser().getUid();
+                           DocumentReference documentReference= FirebaseFirestore.getInstance().collection("users").document(userID);
+                           documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                               @Override
+                               public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                   if (documentSnapshot.getString("Profession").equals("u")){
+                                       startActivity(new Intent(getApplicationContext(), Home.class));
+                                       finish();
+                                   }
+                                   if (documentSnapshot.getString("Profession").equals("d")){
+                                       startActivity(new Intent(getApplicationContext(), DoctorHome.class));
+                                       finish();
+                                   }
+                                   if (documentSnapshot.getString("Profession").equals("p")){
+                                       startActivity(new Intent(getApplicationContext(), Home.class));
+                                       finish();
+                                   }
+                               }
+                           });
+
+
                        }
                        else{
                            Toast.makeText(getApplicationContext(),"Please verify email to use this app",Toast.LENGTH_LONG).show();
@@ -69,6 +95,30 @@ public class MainActivity extends AppCompatActivity {
                        Toast.makeText(MainActivity.this,"error occured", Toast.LENGTH_SHORT).show();
                    }
                }) ;
+            }
+        });
+
+        //forgot password (14-2-2021)
+
+        loginForgotPassword = findViewById(R.id.forgotpassword);
+        loginForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(loginEmail.getText().toString().isEmpty()) {
+                    loginEmail.setError("Enter Email");
+                    return;
+                }
+                fAuth.sendPasswordResetEmail(loginEmail.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getApplicationContext(),"reset link sent to email",Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this,e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

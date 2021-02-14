@@ -14,11 +14,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Signup extends AppCompatActivity {
-    EditText signupFname,signupEmailid,signupPwd,signupConfirmPwd;
+    EditText signupFname,signupEmailid,signupPwd,signupConfirmPwd,signupProfession;
     Button signupBtn;
     FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    String userID;
+    Integer usertype;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +39,8 @@ public class Signup extends AppCompatActivity {
         signupConfirmPwd = findViewById(R.id.signupconfirmpassword);
         signupBtn = findViewById(R.id.signupbutton);
         fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+        signupProfession=findViewById(R.id.profession);
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +49,7 @@ public class Signup extends AppCompatActivity {
                 String semail= signupEmailid.getText().toString();
                 String spassword= signupPwd.getText().toString();
                 String sconfirmpassword= signupConfirmPwd.getText().toString();
+                String sprofession= signupProfession.getText().toString();
 
                 if (sfname.isEmpty()){
                     signupFname.setError("field cannot be empty");
@@ -57,17 +68,41 @@ public class Signup extends AppCompatActivity {
                     signupConfirmPwd.setError("field cannot be empty");
                     return;
                 }
+                if (sprofession.isEmpty()){
+                    signupProfession.setError("field is empty");
+                    return;
+                }
                  if (!spassword.equals(sconfirmpassword)){
                      signupConfirmPwd.setError("passwords do not match");
                  }
+
 
                  fAuth.createUserWithEmailAndPassword(semail,spassword).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                      @Override
                      public void onSuccess(AuthResult authResult) {
 
                          fAuth.getCurrentUser().sendEmailVerification();
-                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
                          Toast.makeText(Signup.this,"Kindly Verify Email",Toast.LENGTH_LONG).show();
+
+                         //to store users data 14 feb 21
+                         userID=fAuth.getCurrentUser().getUid();
+                         DocumentReference documentReference=fStore.collection("users").document(userID);
+                         Map<String,Object> user = new HashMap<>();
+                         user.put("Full Name",sfname);
+                         user.put("Email ID",semail);
+                         user.put("Profession",sprofession);
+                         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                             @Override
+                             public void onSuccess(Void aVoid) {
+                             }
+                         }).addOnFailureListener(new OnFailureListener() {
+                             @Override
+                             public void onFailure(@NonNull Exception e) {
+                                 Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                             }
+                         });
+
+                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
                          finish();
                      }
                  }).addOnFailureListener(new OnFailureListener() {
