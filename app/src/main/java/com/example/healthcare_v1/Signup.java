@@ -26,7 +26,6 @@ public class Signup extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
-    Integer usertype;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

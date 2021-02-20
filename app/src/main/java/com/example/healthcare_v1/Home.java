@@ -10,7 +10,7 @@ import android.widget.Button;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Home extends AppCompatActivity {
-    Button logoutBtn;
+    Button logoutBtn,mRepoBtn;
     FirebaseAuth fAuth;
 
     @Override
@@ -20,12 +20,19 @@ public class Home extends AppCompatActivity {
 
         fAuth =FirebaseAuth.getInstance();
         logoutBtn=findViewById(R.id.logoutbutton);
+        mRepoBtn=findViewById(R.id.mreports);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fAuth.signOut();
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 finish();
+            }
+        });
+        mRepoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),test.class));
             }
         });
     }
