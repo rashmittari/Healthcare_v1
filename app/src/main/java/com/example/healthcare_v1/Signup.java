@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,7 +24,7 @@ import java.util.Map;
 
 public class Signup extends AppCompatActivity {
     EditText signupFname,signupEmailid,signupPwd,signupConfirmPwd,signupProfession;
-    Button signupBtn;
+    TextView signupBtn;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
@@ -39,7 +41,8 @@ public class Signup extends AppCompatActivity {
         signupBtn = findViewById(R.id.signupbutton);
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
-        signupProfession=findViewById(R.id.profession);
+       // signupProfession=findViewById(R.id.profession);
+
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
     TextView createAcc,loginForgotPassword;
     EditText loginEmail,loginPassword;
-    Button loginButton;
+    TextView loginButton;
     FirebaseAuth fAuth;
     String userID;
 
