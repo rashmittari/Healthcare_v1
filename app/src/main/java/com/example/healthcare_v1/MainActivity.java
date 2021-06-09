@@ -68,15 +68,15 @@ public class MainActivity extends AppCompatActivity {
                            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                @Override
                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                   if (documentSnapshot.getString("Profession").equals("u")){
+                                   if (documentSnapshot.getString("Profession").equals("Normal User")){
                                        startActivity(new Intent(getApplicationContext(), Home.class));
                                        finish();
                                    }
-                                   if (documentSnapshot.getString("Profession").equals("d")){
+                                   if (documentSnapshot.getString("Profession").equals("Doctor")){
                                        startActivity(new Intent(getApplicationContext(), DoctorHome.class));
                                        finish();
                                    }
-                                   if (documentSnapshot.getString("Profession").equals("p")){
+                                   if (documentSnapshot.getString("Profession").equals("Pharmacist")){
                                        startActivity(new Intent(getApplicationContext(), Home.class));
                                        finish();
                                    }
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                }).addOnFailureListener(new OnFailureListener() {
                    @Override
                    public void onFailure(@NonNull Exception e) {
-                       Toast.makeText(MainActivity.this,"error occured", Toast.LENGTH_SHORT).show();
+                       Toast.makeText(MainActivity.this,e.getMessage(), Toast.LENGTH_SHORT).show();
                    }
                }) ;
             }

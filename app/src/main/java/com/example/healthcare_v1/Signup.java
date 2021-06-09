@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,7 +21,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Signup extends AppCompatActivity {
@@ -27,7 +31,8 @@ public class Signup extends AppCompatActivity {
     TextView signupBtn;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
-    String userID;
+    String userID,data;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,32 @@ public class Signup extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
        // signupProfession=findViewById(R.id.profession);
 
+        //List<String> states = Arrays.asList("u","d","Pharmacist");
+
+       // spinner = findViewById(R.id.spinner);
+        //ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //spinner.setAdapter(adapter);
+
+        //
+        spinner=findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence>adapter=ArrayAdapter.createFromResource(this,R.array.spinnerlist, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                data=parent.getItemAtPosition(position).toString();
+                //Toast.makeText(getApplicationContext(),data,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        //
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +82,9 @@ public class Signup extends AppCompatActivity {
                 String semail= signupEmailid.getText().toString();
                 String spassword= signupPwd.getText().toString();
                 String sconfirmpassword= signupConfirmPwd.getText().toString();
-                String sprofession= signupProfession.getText().toString();
+                String sprofession= spinner.getSelectedItem().toString();
+               // String sprofession= spinner.getSelectedItem().toString();
+                        //signupProfession.getText().toString();
 
                 if (sfname.isEmpty()){
                     signupFname.setError("field cannot be empty");
@@ -70,10 +103,10 @@ public class Signup extends AppCompatActivity {
                     signupConfirmPwd.setError("field cannot be empty");
                     return;
                 }
-                if (sprofession.isEmpty()){
-                    signupProfession.setError("field is empty");
-                    return;
-                }
+               // if (sprofession.isEmpty()){
+                //    signupProfession.setError("field is empty");
+                //    return;
+                //}
                  if (!spassword.equals(sconfirmpassword)){
                      signupConfirmPwd.setError("passwords do not match");
                  }
@@ -110,7 +143,7 @@ public class Signup extends AppCompatActivity {
                  }).addOnFailureListener(new OnFailureListener() {
                      @Override
                      public void onFailure(@NonNull Exception e) {
-                         Toast.makeText(Signup.this, "Error occured",Toast.LENGTH_SHORT).show();
+                         Toast.makeText(Signup.this, e.getMessage(),Toast.LENGTH_SHORT).show();
                      }
                  });
 

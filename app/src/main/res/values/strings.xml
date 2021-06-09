@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Healthcare-v1</string>
+    <string-array name="spinnerlist">
+        <item>Normal User</item>
+        <item>Doctor</item>
+        <item>Pharmacist</item>
+
+    </string-array>
+
 </resources>

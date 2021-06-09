@@ -41,5 +41,17 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectfile"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.383" />
+
+    <EditText
+        android:id="@+id/reportname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="enter report name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/uploadbtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectfile" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,11 +14,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,10 +43,18 @@ public class test extends AppCompatActivity {
     String userID;
     ProgressDialog progressDialog;
 
+    //new 3june
+    EditText reportnamejava;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+
+        //3june
+        reportnamejava=findViewById(R.id.reportname);
+        //String justchecking= reportnamejava.getText().toString();
+        //
 
         upBtn=findViewById(R.id.uploadbtn);
         fileNameDisp=findViewById(R.id.filename);
@@ -97,26 +107,52 @@ public class test extends AppCompatActivity {
         progressDialog.show();
 
         userID=fAuth.getCurrentUser().getUid();
-        String fileName=System.currentTimeMillis()+"";
+        //String fileName=System.currentTimeMillis()+"";
+        String fileName= reportnamejava.getText().toString();
         StorageReference storageReference=fStorage.getReference();
         storageReference.child("Uploads").child(userID).child(fileName).putFile(pdfUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                String url=taskSnapshot.getStorage().getDownloadUrl().toString();
-                DocumentReference documentReference=FirebaseFirestore.getInstance().collection("users").document(userID).collection("Medical Reports").document(userID);
-                Map<String,Object> user = new HashMap<>();
-                user.put(fileName,url);
+                //String url=taskSnapshot.getStorage().getDownloadUrl().toString();
+                //String url=taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                //DocumentReference documentReference=FirebaseFirestore.getInstance().collection("users").document(userID).collection("Medical Reports").document(fileName);
+                //Map<String,Object> user = new HashMap<>();
+                //user.put("URL",url);
+                //user.put("FileName",fileName);
 
-                documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                    public void onSuccess(Uri uri) {
+                        String url = uri.toString();
+                        DocumentReference documentReference=fFirestore.collection("users").document(userID).collection("Medical Reports").document(fileName);
+                        Map<String,Object> user = new HashMap<>();
+                        user.put("URL",url);
+                        user.put("FileName",fileName);
+                        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                 public void onSuccess(Void aVoid) {
+                                }
+                             }).addOnFailureListener(new OnFailureListener() {
+                               @Override
+                                public void onFailure(@NonNull Exception e) {
+                                   Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                               }
+                             });
                     }
                 });
+
+
+               // documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+               //     @Override
+               //     public void onSuccess(Void aVoid) {
+                //    }
+               // }).addOnFailureListener(new OnFailureListener() {
+                 //   @Override
+                //    public void onFailure(@NonNull Exception e) {
+                 //       Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                 //   }
+               // });
 
             }
         }).addOnFailureListener(new OnFailureListener() {
