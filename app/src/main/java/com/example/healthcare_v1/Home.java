@@ -69,6 +69,14 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MedStoreSearch.class));
+            }
+        });
+        
+
        /* bookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Medical_Records">
+    tools:context=".Medical_Records"
+    android:background="@drawable/testbackground">
 
 
     <androidx.recyclerview.widget.RecyclerView

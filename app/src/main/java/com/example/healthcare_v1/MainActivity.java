@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                                        finish();
                                    }
                                    if (documentSnapshot.getString("Profession").equals("Pharmacist")){
-                                       startActivity(new Intent(getApplicationContext(), Home.class));
+                                       startActivity(new Intent(getApplicationContext(), PharmacistHome.class));
                                        finish();
                                    }
                                }
@@ -127,7 +127,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(FirebaseAuth.getInstance().getCurrentUser()!=null&&FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
-            startActivity(new Intent(getApplicationContext(),Home.class));
+            //startActivity(new Intent(getApplicationContext(),Home.class));
+
+            //
+            userID=fAuth.getCurrentUser().getUid();
+            DocumentReference documentReference= FirebaseFirestore.getInstance().collection("users").document(userID);
+            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.getString("Profession").equals("Normal User")){
+                        startActivity(new Intent(getApplicationContext(), Home.class));
+                        finish();
+                    }
+                    if (documentSnapshot.getString("Profession").equals("Doctor")){
+                        startActivity(new Intent(getApplicationContext(), DoctorHome.class));
+                        finish();
+                    }
+                    if (documentSnapshot.getString("Profession").equals("Pharmacist")){
+                        startActivity(new Intent(getApplicationContext(), PharmacistHome.class));
+                        finish();
+                    }
+                }
+            });
 
         }
     }

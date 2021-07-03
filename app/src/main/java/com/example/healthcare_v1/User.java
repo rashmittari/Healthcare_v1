@@ -1,8 +1,11 @@
 package com.example.healthcare_v1;
 
+import java.util.List;
+
 public class User {
 
     String name,profession,qualifications,timings,address,fees;
+    List<String> available;
 
     public User(){}
 
@@ -10,13 +13,14 @@ public class User {
    //     this.name = name;
    // }
 
-    public User(String name, String profession, String qualifications, String timings, String address, String fees) {
+    public User(String name, String profession, String qualifications, String timings, String address, String fees, List<String> available) {
         this.name = name;
         this.profession = profession;
         this.qualifications = qualifications;
         this.timings = timings;
         this.address = address;
         this.fees = fees;
+        this.available = available;
     }
 
     public String getName() {
@@ -66,4 +70,23 @@ public class User {
     public void setFees(String fees) {
         this.fees = fees;
     }
+
+//
+
+
+    public List<String> getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(List<String> available) {
+        this.available = available;
+    }
+
+   // public List<String> getTags() {
+    //    return tags;
+   // }
+
+   // public void setTags(List<String> tags) {
+   //     this.tags = tags;
+    //}
 }

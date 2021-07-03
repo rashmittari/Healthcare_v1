@@ -4,30 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DoctorHome"
-    android:background="@drawable/testbackground">
+    tools:context=".MedStoreSearch">
 
-    <TextView
-        android:id="@+id/textView"
+    <EditText
+        android:id="@+id/medicineSearchName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Homepage for \n Doctor"
-        android:textSize="45sp"
+        android:ems="10"
+        android:hint="Enter Medicine Name"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/dlogoutbutton"
+        android:id="@+id/medicineSearchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="Search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/medicineSearchName"
+        app:layout_constraintVertical_bias="0.299" />
 </androidx.constraintlayout.widget.ConstraintLayout>
