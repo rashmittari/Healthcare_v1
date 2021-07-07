@@ -45,11 +45,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.timings.setText(user.timings);
         holder.address.setText(user.address);
         holder.fees.setText(user.fees);
+
+        //holder.user_id.setText(user.user_id);
+
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context.getApplicationContext(),DrBookingDetails.class);
                 intent.putExtra("dr_name",user.name);
+                intent.putExtra("dr_prof",user.profession);
+                intent.putExtra("dr_qualifications",user.qualifications);
+                intent.putExtra("dr_address",user.address);
+                intent.putExtra("dr_fees",user.fees);
+
+
+                intent.putExtra("dr_uid",user.user_id);
+
+
                 intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                 context.getApplicationContext().startActivity(intent);
             }
@@ -63,7 +75,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView name,profession,qualifications,timings,address,fees;
+        TextView name,profession,qualifications,timings,address,fees,user_id;
         RelativeLayout relativeLayout;
 
 
@@ -75,7 +87,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             timings = itemView.findViewById(R.id.drtimings);
             address = itemView.findViewById(R.id.draddress);
             fees = itemView.findViewById(R.id.drfees);
+
+
+            //user_id = itemView.findViewById(R.id.druserid);
+
+
             relativeLayout = itemView.findViewById(R.id.detailscard);
+
+
         }
     }
 }

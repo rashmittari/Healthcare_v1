@@ -31,14 +31,14 @@
                         android:layout_gravity="center">
 
                         <TextView
+                            android:id="@+id/signupTextview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/signupTextview"
                             android:layout_centerInParent="true"
                             android:layout_gravity="center"
                             android:layout_marginTop="12dp"
-                            android:text="Signup"
                             android:fontFamily="sans-serif"
+                            android:text="Login"
                             android:textColor="#205072"
                             android:textSize="40sp" />
 

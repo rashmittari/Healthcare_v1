@@ -4,8 +4,8 @@ import java.util.List;
 
 public class User {
 
-    String name,profession,qualifications,timings,address,fees;
-    List<String> available;
+    String name,profession,qualifications,timings,address,fees,user_id;
+    List<String> available,Time_slots;
 
     public User(){}
 
@@ -13,7 +13,7 @@ public class User {
    //     this.name = name;
    // }
 
-    public User(String name, String profession, String qualifications, String timings, String address, String fees, List<String> available) {
+    public User(String name, String profession, String qualifications, String timings, String address, String fees, List<String> available, String user_id, List<String> Time_slots) {
         this.name = name;
         this.profession = profession;
         this.qualifications = qualifications;
@@ -21,6 +21,8 @@ public class User {
         this.address = address;
         this.fees = fees;
         this.available = available;
+        this.user_id = user_id;
+        this.Time_slots = Time_slots;
     }
 
     public String getName() {
@@ -82,7 +84,23 @@ public class User {
         this.available = available;
     }
 
-   // public List<String> getTags() {
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public List<String> getTime_slots() {
+        return Time_slots;
+    }
+
+    public void setTime_slots(List<String> time_slots) {
+        Time_slots = time_slots;
+    }
+
+    // public List<String> getTags() {
     //    return tags;
    // }
 

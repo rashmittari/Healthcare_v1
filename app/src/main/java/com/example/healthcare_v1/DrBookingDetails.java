@@ -3,6 +3,7 @@ package com.example.healthcare_v1;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,29 +35,36 @@ import java.util.Map;
 
 public class DrBookingDetails extends AppCompatActivity {
 
-    TextView drnam,tgs;
-    //
-    Spinner Dspinner,Tspinner;
-    ArrayList<String> spinnerList;
-    ArrayAdapter<String> adapter;
-    //
+    TextView drnam,tgs,doctorid,drprofession,drqualifications,drlocation;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference notebookRef=db.collection("users").document("test").collection("test3");
-    //DocumentReference flop = db.collection("users").document("test").collection("test3").document("31-12-2021");
-   // DocumentSnapshot lastResult;
+
 
     EditText Date,Time;
     Button checkA,confirmB;
-    String date,time;
+    String date,time,userID;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dr_booking_details);
 
-        drnam = findViewById(R.id.dispname);
+        firebaseAuth= FirebaseAuth.getInstance();
+
+        //drnam = findViewById(R.id.dispname);
+        drnam = findViewById(R.id.userFullName);
+        doctorid = findViewById(R.id.textView211);
+        drprofession = findViewById(R.id.drproffesion);
+        drqualifications = findViewById(R.id.drqualification);
+        drlocation = findViewById(R.id.draddress);
+
 
         drnam.setText(getIntent().getExtras().getString("dr_name"));
+        doctorid.setText(getIntent().getExtras().getString("dr_uid"));
+        drprofession.setText(getIntent().getExtras().getString("dr_prof"));
+        drqualifications.setText(getIntent().getExtras().getString("dr_qualifications"));
+        drlocation.setText(getIntent().getExtras().getString("dr_address"));
 
         //
 
@@ -97,9 +106,6 @@ public class DrBookingDetails extends AppCompatActivity {
 
          */
         tgs = findViewById(R.id.textViewtags);
-        //loadNotes();
-
-
 
         //last idea
         checkA = findViewById(R.id.checkavailabletimeslots);
@@ -117,9 +123,12 @@ public class DrBookingDetails extends AppCompatActivity {
                 date= Date.getText().toString();
                 time= Time.getText().toString();
 
+                String category = getIntent().getStringExtra("dr_prof");
+                String did = getIntent().getStringExtra("dr_uid");
 
-                DocumentReference documentReference= FirebaseFirestore.getInstance().collection("users").document("test")
-                        .collection("test3").document(date);
+
+                DocumentReference documentReference= FirebaseFirestore.getInstance().collection("users").document("doctors")
+                        .collection(category).document(did).collection("Time Slots").document(date);
                 documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -136,28 +145,43 @@ public class DrBookingDetails extends AppCompatActivity {
                                 checkavailabilityofslots();
                             }
                             else {
-                                generateTimeslots();
+
+                                String category = getIntent().getStringExtra("dr_prof");
+                                String did = getIntent().getStringExtra("dr_uid");
+
+                                //db.collection("users").document("test").collection("test3").document(date)
+                                db.collection("users").document("doctors").collection(category)
+                                        .document(did)
+                                        //.collection("Time Slots").document(date)
+                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        String data10 = "";
+                                        ArrayList<String> spinnerList10 = new ArrayList<String>();
+                                        User user= documentSnapshot.toObject(User.class);
+
+                                        for (String string : user.getTime_slots()){
+                                            data10 +=  string + "," ;
+                                        }
+                                        spinnerList10.add(data10);
+
+                                        String data11= spinnerList10.toString();
+                                        String[] tagArray= data10.split("\\s*,\\s*");
+                                        List<String> tags = Arrays.asList(tagArray);
+
+                                        //tgs.setText(data10);
+                                       // Toast.makeText(DrBookingDetails.this,spinnerList10.toString(),Toast.LENGTH_LONG).show();
+                                        generateTimeslots(tags);
+                                    }
+                                });
+
+                               // generateTimeslots();
 
                                 //Log.d(TAG, "No such document");
                                 //Toast.makeText(getApplicationContext(),time,Toast.LENGTH_SHORT).show();
                                 //tgs.setText(date);
 
-                               /* db.collection("users").document("test")
-                                        .collection("test3")
-                                        .add(u)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                               // Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
 
-                                    }
-                                });
-
-                                */
                             }
                         } else {
                             //Log.d(TAG, "get failed with ", task.getException());
@@ -178,48 +202,27 @@ public class DrBookingDetails extends AppCompatActivity {
                 date= Date.getText().toString();
                 time= Time.getText().toString();
 
-                db.collection("users").document("test").collection("test3").document(date)
+                String category = getIntent().getStringExtra("dr_prof");
+                String did = getIntent().getStringExtra("dr_uid");
+
+                db.collection("users").document("doctors").collection(category)
+                        .document(did).collection("Time Slots").document(date)
                 .update("available", FieldValue.arrayRemove(time));
+
+                patientaptdetailsgeneration();
             }
         });
-
     }
 
     private void checkavailabilityofslots() {
 
-        String a="a";
-        String b="b";
-        String c="c";
-        String d="d";
-        String e="e";
 
-       /* notebookRef.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        String data = "";
-                        ArrayList<String> spinnerList = new ArrayList<String>();
+        String category = getIntent().getStringExtra("dr_prof");
+        String did = getIntent().getStringExtra("dr_uid");
 
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            User user= documentSnapshot.toObject(User.class);
-
-                            for (String tag :user.getAvailable()) {
-                                data +="\n-"+tag;
-
-                            }
-                            spinnerList.add(data);
-
-                            //data += "\n\n";
-                            //data = " ";
-                        }
-                        tgs.setText(data);
-                        Toast.makeText(DrBookingDetails.this,spinnerList.toString(),Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        */
-
-        db.collection("users").document("test").collection("test3").document(date)
+        //db.collection("users").document("test").collection("test3").document(date)
+        db.collection("users").document("doctors").collection(category)
+                .document(did).collection("Time Slots").document(date)
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -228,16 +231,13 @@ public class DrBookingDetails extends AppCompatActivity {
                 User user= documentSnapshot.toObject(User.class);
 
                 for (String string : user.getAvailable()){
-                    data2 += "\n-" + string;
+                    data2 +=  string + "\n ";
                 }
                 spinnerList2.add(data2);
                 tgs.setText(data2);
-                Toast.makeText(DrBookingDetails.this,spinnerList2.toString(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(DrBookingDetails.this,spinnerList2.toString(),Toast.LENGTH_LONG).show();
             }
         });
-
-
-
 
 
 
@@ -270,18 +270,24 @@ public class DrBookingDetails extends AppCompatActivity {
 
     }
 
-    private void generateTimeslots() {
+    private void generateTimeslots(List<String> tags) {
 
-        DocumentReference documentReference=db.collection("users").document("test")
-                .collection("test3").document(date);
+
+        String category = getIntent().getStringExtra("dr_prof");
+        String did = getIntent().getStringExtra("dr_uid");
+
+        DocumentReference documentReference= db.collection("users").document("doctors").collection(category)
+                .document(did).collection("Time Slots").document(date);
 
         Map<String,Object> u = new HashMap<>();
-        u.put("available", Arrays.asList("10:00", "11:00"));
+        //u.put("available", Arrays.asList("10:00", "11:00"));
+       // u.put("available", Arrays.asList(spinnerList10));
+        u.put("available", tags);
 
         documentReference.set(u).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"date document generated",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"date document generated",Toast.LENGTH_SHORT).show();
                 checkavailabilityofslots();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -320,4 +326,133 @@ public class DrBookingDetails extends AppCompatActivity {
     }
 
     */
+
+    private void patientaptdetailsgeneration() {
+
+        userID=firebaseAuth.getCurrentUser().getUid();
+        date= Date.getText().toString();
+        time= Time.getText().toString();
+
+        String profession = getIntent().getStringExtra("dr_prof");
+        String name = getIntent().getStringExtra("dr_name");
+        String qualification = getIntent().getStringExtra("dr_qualifications");
+        String address = getIntent().getStringExtra("dr_address");
+        String fees = getIntent().getStringExtra("dr_fees");
+        //String profession = getIntent().getStringExtra("dr_prof");
+        //status,timing,date
+
+
+
+        DocumentReference documentReference = db.collection("users").document("patients")
+                .collection("all").document(userID).collection("My_appointments")
+                .document(date);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        date=date+"(2)";
+                        generation(documentReference,date);
+                    } else {
+                       // Log.d(TAG, "No such document");
+                        generation(documentReference,date);
+                    }
+                } else {
+                    //Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+    }
+
+    private void generation(DocumentReference documentReference, String date) {
+
+        time= Time.getText().toString();
+
+        String profession = getIntent().getStringExtra("dr_prof");
+        String name = getIntent().getStringExtra("dr_name");
+        String qualification = getIntent().getStringExtra("dr_qualifications");
+        String address = getIntent().getStringExtra("dr_address");
+        String fees = getIntent().getStringExtra("dr_fees");
+
+        Map<String,Object> z = new HashMap<>();
+        //u.put("available", Arrays.asList("10:00", "11:00"));
+        // u.put("available", Arrays.asList(spinnerList10));
+        z.put("name", name);
+        z.put("profession", profession);
+        z.put("qualifications", qualification);
+        z.put("timings", time);
+        z.put("address", address);
+        z.put("status", "upcoming");
+        z.put("fees", fees);
+        z.put("date", date);
+
+        documentReference.set(z).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_SHORT).show();
+                //checkavailabilityofslots();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+        apointmentdetailsfordoctor();
+
+    }
+    private void apointmentdetailsfordoctor() {
+
+        date= Date.getText().toString();
+        time= Time.getText().toString();
+
+        String profession = getIntent().getStringExtra("dr_prof");
+
+        String userID = firebaseAuth.getCurrentUser().getUid();
+        String did = getIntent().getStringExtra("dr_uid");
+
+        DocumentReference documentReference= FirebaseFirestore.getInstance().collection("users")
+                .document("patients").collection("all").document(userID);
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                String name = documentSnapshot.getString("name");
+                String age = documentSnapshot.getString("age");
+                String gender = documentSnapshot.getString("gender");
+
+                Map<String,Object> a = new HashMap<>();
+                a.put("Pname", name);
+                a.put("Age", age);
+                a.put("Gender", gender);
+                a.put("Date", date);
+                a.put("Time", time);
+                a.put("user_id", userID);
+
+                db.collection("users").document("doctors").collection(profession)
+                        .document(did).collection("Appointments")
+                        .document("all").collection(date)
+                        .add(a).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        startActivity(new Intent(getApplicationContext(),Home.class));
+                        Toast.makeText(getApplicationContext(),"Appointment Booked",Toast.LENGTH_LONG).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+            }
+        });
+
+
+
+    }
+
 }

@@ -9,10 +9,18 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Healthcarev1">
-        <activity android:name=".PManageProfile"></activity>
+        <activity android:name=".Prescription_records"></activity>
+        <activity android:name=".Text_to_pdf" />
+        <activity android:name=".Prescription" />
+        <activity android:name=".Doctor_Appointments" />
+        <activity android:name=".Patient_Appointments" />
+        <activity android:name=".UserProfile" />
+        <activity android:name=".ClinicDetails" />
+        <activity android:name=".PManageProfile" />
         <activity android:name=".MedicineNameEntry" />
         <activity android:name=".PharmacistHome" />
         <activity android:name=".MedStoreSearch" />
@@ -33,6 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Confirm_Prescription" />
     </application>
 
 </manifest>

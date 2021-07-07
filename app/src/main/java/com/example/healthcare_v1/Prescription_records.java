@@ -24,7 +24,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class Medical_Records extends AppCompatActivity {
+public class Prescription_records extends AppCompatActivity {
+
     FirebaseAuth fAuth;
     String userID;
     FloatingActionButton fb;
@@ -35,18 +36,19 @@ public class Medical_Records extends AppCompatActivity {
     FirebaseFirestore db;
     ProgressDialog progressDialog;
     //
-    TextView pres;
+
+    TextView openx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_medical__records);
+        setContentView(R.layout.activity_prescription_records);
 
-        pres = findViewById(R.id.myaptpast3);
-        pres.setOnClickListener(new View.OnClickListener() {
+        openx = findViewById(R.id.myaptupcoming2);
+        openx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Prescription_records.class));
+                startActivity(new Intent(getApplicationContext(),Medical_Records.class));
                 finish();
             }
         });
@@ -55,26 +57,20 @@ public class Medical_Records extends AppCompatActivity {
         userID=fAuth.getCurrentUser().getUid();
         //Toast.makeText(getApplicationContext(),userID,Toast.LENGTH_SHORT).show();
 
-        fb = findViewById(R.id.floatingActionButton);
-        fb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), test.class));
-            }
-        });
+
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Fetching Data... ");
         progressDialog.show();
 
-        recview= findViewById(R.id.recview);
+        recview= findViewById(R.id.recviewPresRecord);
         recview.setHasFixedSize(true);
         recview.setLayoutManager(new LinearLayoutManager(this));
 
         db = FirebaseFirestore.getInstance();
         userArrayList2 = new ArrayList<model_pdf>();
-        myadapterpdf = new myadapterpdf(Medical_Records.this,userArrayList2);
+        myadapterpdf = new myadapterpdf(Prescription_records.this,userArrayList2);
 
         recview.setAdapter(myadapterpdf);
 
@@ -88,7 +84,7 @@ public class Medical_Records extends AppCompatActivity {
         userID=fAuth.getCurrentUser().getUid();
 
         db.collection("users").document("patients").collection("all")
-                .document(userID).collection("Medical Reports")
+                .document(userID).collection("Prescriptions")
                 .orderBy("FileName", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -118,6 +114,7 @@ public class Medical_Records extends AppCompatActivity {
 
                     }
                 });
+
 
     }
 }

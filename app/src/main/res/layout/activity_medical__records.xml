@@ -8,14 +8,67 @@
     android:background="@drawable/testbackground">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center_horizontal"
+                    android:id="@+id/suva2">
+
+                    <TextView
+                        android:id="@+id/myaptupcoming3"
+                        android:layout_width="150dp"
+                        android:layout_height="35dp"
+                        android:text="Reports"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:gravity="center"
+                        android:background="@drawable/blue_fill__rounded_color"/>
+                    <TextView
+                        android:id="@+id/myaptpast3"
+                        android:layout_width="150dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/blue_border_rounded_cornwe"
+                        android:text="Prescriptions"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:layout_toRightOf="@id/myaptupcoming3"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:gravity="center"/>
+
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/suva2" />
+
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -29,5 +82,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.939"
         app:srcCompat="@android:drawable/ic_input_add"/>
+
+
+
+
+
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

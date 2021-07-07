@@ -125,13 +125,17 @@ public class test extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         String url = uri.toString();
-                        DocumentReference documentReference=fFirestore.collection("users").document(userID).collection("Medical Reports").document(fileName);
+                        DocumentReference documentReference=fFirestore.collection("users").document("patients")
+                                .collection("all").document(userID)
+                                .collection("Medical Reports").document(fileName);
                         Map<String,Object> user = new HashMap<>();
                         user.put("URL",url);
                         user.put("FileName",fileName);
                         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                  public void onSuccess(Void aVoid) {
+
+                                    startActivity(new Intent(getApplicationContext(),Medical_Records.class));
                                 }
                              }).addOnFailureListener(new OnFailureListener() {
                                @Override

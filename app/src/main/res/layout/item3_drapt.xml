@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="16dp"
+    app:cardBackgroundColor="@color/white">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginVertical="8dp"
+        android:id="@+id/patientinfofordr">
+
+        <ImageView
+            android:id="@+id/profilepic"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/profile"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/linearlayofname"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/profilepic">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name: "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/userFullName3"
+                android:layout_marginStart="2dp"
+                android:text="boy"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+               />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/linearlayofage"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/profilepic"
+            android:layout_below="@+id/linearlayofname">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Age: "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/userage"
+                android:layout_marginStart="2dp"
+                android:text="boy"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/linearlayofgender"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/profilepic"
+            android:layout_below="@+id/linearlayofage">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gender: "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/usergender"
+                android:layout_marginStart="2dp"
+                android:text="boy"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/linearlayoftime"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/profilepic"
+            android:layout_below="@+id/linearlayofgender">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Appointment Time: "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="normal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/userapttime"
+                android:layout_marginStart="2dp"
+                android:text="boy"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+<!--
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/drqualification2"
+            android:layout_below="@id/linearlayofname2"
+            android:layout_toRightOf="@id/profilepic"
+            android:layout_marginStart="16dp"
+            android:text="MBBS, MD"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/drtimings2"
+            android:layout_below="@id/drqualification2"
+            android:layout_toRightOf="@id/profilepic"
+            android:layout_marginStart="16dp"
+            android:text="Mon to Sat 5pm-7pm"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/draddress2"
+            android:layout_below="@id/drtimings2"
+            android:layout_toRightOf="@id/profilepic"
+            android:layout_marginStart="16dp"
+            android:text="Shop no. 23, Eagle Appartments, St.Inez Goa"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/drfees2"
+            android:layout_below="@id/draddress2"
+            android:layout_toRightOf="@id/profilepic"
+            android:layout_marginStart="16dp"
+            android:text="Fees: Rs 500"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status2"
+            android:layout_below="@id/drfees2"
+            android:layout_toRightOf="@id/profilepic"
+            android:layout_marginStart="16dp"
+            android:text="Upcoming"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+-->
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
